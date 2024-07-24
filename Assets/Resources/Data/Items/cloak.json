@@ -1,0 +1,12 @@
+﻿{
+  "name": "Dark Cloak",
+  "description": "Invisible to enemies until you attack them",
+  "icon": "cloak",
+  "rarity": "legendary",
+  "stackable": false,
+  "function": {
+    "name": "cloaked",
+    "change": 1,
+    "operation": "set"
+  }
+}

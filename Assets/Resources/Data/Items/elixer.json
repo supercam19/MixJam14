@@ -1,0 +1,11 @@
+﻿{
+  "name": "Life Elixir",
+  "description": "Increases max health by 25",
+  "icon": "elixir",
+  "rarity": "common",
+  "function": {
+    "name": "maxHealth",
+    "change": 25,
+    "operation": "add"
+  }
+}

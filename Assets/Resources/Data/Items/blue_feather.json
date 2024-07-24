@@ -1,0 +1,11 @@
+﻿{
+  "name": "Blue Feather",
+  "description": "Increase movement speed by 10%.",
+  "icon": "blue_feather",
+  "rarity": "common",
+  "function": {
+    "name": "speed",
+    "change": 1.1,
+    "operation": "multiply"
+  }
+}

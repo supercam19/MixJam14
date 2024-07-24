@@ -1,0 +1,11 @@
+﻿{
+  "name": "Green Orb",
+  "description": "Reduces damage by 15% while sprinting",
+  "icon": "green_orb",
+  "rarity": "rare",
+  "function": {
+    "name": "sprintDamageReduction",
+    "change": 1.15,
+    "operation": "multiply"
+  }
+}

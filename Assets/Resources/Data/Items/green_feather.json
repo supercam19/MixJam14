@@ -1,0 +1,11 @@
+﻿{
+  "name": "Green Feather",
+  "description": "Increase sprinting speed by 15%",
+  "icon": "green_feather",
+  "rarity": "common",
+  "function": {
+    "name": "sprintMultiplier",
+    "change": 1.15,
+    "operation": "multiply"
+  }
+}

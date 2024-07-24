@@ -1,0 +1,11 @@
+﻿{
+  "name": "Sack Of Gold",
+  "description": "Gain extra gold when you kill an enemy.",
+  "icon": "sack_of_gold",
+  "rarity": "rare",
+  "function": {
+    "name": "bonusGoldPerKill",
+    "change": 1,
+    "operation": "add"
+  }
+}

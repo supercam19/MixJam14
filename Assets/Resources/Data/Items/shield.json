@@ -1,0 +1,11 @@
+﻿{
+  "name": "Warrior's Shield",
+  "description": "Reduces incoming damage",
+  "icon": "shield",
+  "rarity": "common",
+  "function": {
+    "name": "damageReduction",
+    "change": 0.9,
+    "operation": "multiply"
+  }
+}
