@@ -18,10 +18,13 @@ public class SmallGunnerDrone : EnemyBehavior {
     }
 
     void Start() {
+        Debug.Log("Health: " + health);
+        Initialize();
         bulletPrefab = Resources.Load<GameObject>("Prefabs/Projectiles/Bullet");
     }
 
     protected override void Attack() {
-        Instantiate(bulletPrefab, transform.position, Utility.RotateToPoint(transform.position, playerTransform.position));
+        ProjectileBehavior pb = Instantiate(bulletPrefab, transform.position, Utility.RotateToPoint(transform.position, playerTransform.position)).GetComponent<ProjectileBehavior>();
+        pb.Fire((player.transform.position - transform.position).normalized);
     }
 }

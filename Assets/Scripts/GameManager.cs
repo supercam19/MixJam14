@@ -5,10 +5,16 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
     public static bool paused = false;
+    public static int level = 1;
+    public static int money = 0;
 
     private GameObject pauseMenu;
     private BinaryPartitionDungeon generator;
     private GameObject player;
+
+    public static List<EnemyBehavior> activeEnemies = new List<EnemyBehavior>();
+    public static List<ChestBehavior> activeChests = new List<ChestBehavior>();
+    
 
     void Start() {
         pauseMenu = GameObject.Find("PauseMenu");
@@ -24,5 +30,16 @@ public class GameManager : MonoBehaviour {
             paused = !paused;
             pauseMenu.SetActive(paused);
         }
+    }
+
+    public static void LevelCleanup() {
+        for (int i = 0; i < activeEnemies.Count; i++) {
+            Destroy(activeEnemies[i].gameObject);
+        }
+        activeEnemies.Clear();
+        foreach (ChestBehavior chest in activeChests) {
+            Destroy(chest.gameObject);
+        }
+        activeChests.Clear();
     }
 }

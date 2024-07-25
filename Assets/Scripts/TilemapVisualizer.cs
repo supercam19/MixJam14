@@ -10,6 +10,7 @@ public class TilemapVisualizer : MonoBehaviour
 
     [SerializeField]
     private RuleTile wallRule;
+    [SerializeField] private TileBase debugTile;
 
     public void PaintFloorTiles(IEnumerable<Vector2Int> floorPositions)
     {
@@ -22,6 +23,10 @@ public class TilemapVisualizer : MonoBehaviour
         {
             PaintSingleTile(tilemap, tile, position);
         }
+    }
+
+    public void PaintDebug(Vector2Int position) {
+        PaintSingleTile(floorTilemap, debugTile, position);
     }
 
     public void PaintWalls(IEnumerable<Vector2Int> wallPositions)

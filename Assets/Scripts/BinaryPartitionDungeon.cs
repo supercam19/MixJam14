@@ -1,27 +1,26 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using NavMeshPlus.Components;
+using Debug = UnityEngine.Debug;
+using UnityEngine.Tilemaps;
 
 public class BinaryPartitionDungeon : MonoBehaviour {
     [SerializeField] private BoundsInt dungeonArea;
     [SerializeField] private TilemapVisualizer tilemapVisualizer;
-    [SerializeField] private int minRoomSize = 24;
-    [SerializeField] private int maxPhysicalRoomSize = 16;
-    [SerializeField] private int minPhysicalRoomSize = 10;
+    [SerializeField] private int minRoomSize;
+    [SerializeField] private int maxPhysicalRoomSize;
+    [SerializeField] private int minPhysicalRoomSize;
     [SerializeField] private NavMeshSurface navMesh;
     
     private HashSet<Vector2Int> floorPositions;
-    private HashSet<Vector2Int> spawnableTiles = new HashSet<Vector2Int>();
     [HideInInspector] public Vector2Int randomSpawnPoint;
     
     [ContextMenu("Generate")]
     public void Generate() {
         tilemapVisualizer.Clear();
+        GameManager.LevelCleanup();
         GenerateDungeon();
     }
 
@@ -40,10 +39,11 @@ public class BinaryPartitionDungeon : MonoBehaviour {
         randomSpawnPoint = Compress(physicalRooms[Random.Range(0, physicalRooms.Length)].center);
         tilemapVisualizer.PaintFloorTiles(floorPositions);
         navMesh.BuildNavMesh();
+        GetComponent<PopulateDungeon>().Populate(physicalRooms);
     }
     
     private BoundsInt[] BinarySpacePartitioning(BoundsInt room) {
-        if (room.size.x <= minRoomSize * 2 || room.size.y <= minRoomSize * 2) {
+        if (room.size.x <= minRoomSize || room.size.y <= minRoomSize) {
             return new BoundsInt[] { room };
         }
         bool horizontal = Random.value > 0.5f;
@@ -67,8 +67,6 @@ public class BinaryPartitionDungeon : MonoBehaviour {
             for (int j = 0; j < height; j++) {
                 Vector2Int pos = new Vector2Int(room.x + x + i, room.y + y + j);
                 floor.Add(pos);
-                if (i > 0 && j > 0 && i < width - 1 && j < height - 1)
-                    spawnableTiles.Add(pos);
             }
         }
 

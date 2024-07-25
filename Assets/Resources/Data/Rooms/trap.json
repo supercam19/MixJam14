@@ -1,0 +1,8 @@
+﻿{
+  "roomChance": 0.2,
+  "spawnMinimum": 10,
+  "spawnMaximum": 20,
+  "enemyChance": 0.75,
+  "woodChestChance": 0.1,
+  "goldChestChance": 0.2
+}

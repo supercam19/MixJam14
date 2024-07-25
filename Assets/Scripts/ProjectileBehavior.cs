@@ -11,14 +11,11 @@ public class ProjectileBehavior : MonoBehaviour {
 
     private Rigidbody2D rb;
     private PlayerStats stats;
-
-    void Start() {
-        rb = GetComponent<Rigidbody2D>();
-        stats = GameObject.Find("Player").GetComponent<PlayerStats>();
-    }
     
     public void Fire(Vector3 direction, float speed = -1) {
         if (speed == -1) speed = this.speed;
+        rb = GetComponent<Rigidbody2D>();
+        stats = GameObject.Find("Player").GetComponent<PlayerStats>();
         rb.velocity = direction * (speed * Time.deltaTime);
     }
 

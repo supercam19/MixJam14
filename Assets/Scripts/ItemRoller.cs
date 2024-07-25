@@ -21,6 +21,10 @@ public class ItemRoller : MonoBehaviour {
         return itemsByRarity[rarity][Random.Range(0, itemsByRarity[rarity].Count)];
     }
 
+    public static Item ReRoll(int rarity) {
+        return itemsByRarity[rarity][Random.Range(0, itemsByRarity[rarity].Count)];
+    }
+
     void Start() {
         for (int i = 0; i < 3; i++) {
             lootTables[i] = LootTable.CreateFromJSON(Resources.Load<TextAsset>("Data/LootTables/" + lootTableResources[i]).ToString());

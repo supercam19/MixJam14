@@ -27,15 +27,17 @@ public class EnemyBehavior : MonoBehaviour {
 
     private float lastTickTime;
 
-    void Start() {
+    protected void Initialize() {
         player = GameObject.Find("Player");
-        agent = GetComponent<NavMeshAgent>();
         playerTransform = player.transform;
         playerBehavior = player.GetComponent<PlayerBehavior>();
         rb = GetComponent<Rigidbody2D>();
         lastTickTime = Random.Range(0, 100);
-        agent.stoppingDistance = attackRange;
-        agent.speed = speed;
+        if (!canFly) {
+            agent = GetComponent<NavMeshAgent>();
+            agent.stoppingDistance = attackRange;
+            agent.speed = speed;
+        }
     }
 
     void Update() {
@@ -79,7 +81,7 @@ public class EnemyBehavior : MonoBehaviour {
             agent.SetDestination(position);
         }
         else {
-            transform.position = Vector3.MoveTowards(transform.position, position, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(position.x, position.y, 0), speed * Time.deltaTime);
         }
     }
 
@@ -96,6 +98,7 @@ public class EnemyBehavior : MonoBehaviour {
     }
 
     protected virtual void Die() {
+        GameManager.activeEnemies.Remove(this);
         Destroy(gameObject);
     }
 }
