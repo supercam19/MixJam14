@@ -27,19 +27,21 @@ public class BinaryPartitionDungeon : MonoBehaviour {
     private void GenerateDungeon() {
         BoundsInt[] rooms = BinarySpacePartitioning(dungeonArea);
         floorPositions = new HashSet<Vector2Int>();
-        BoundsInt[] physicalRooms = new BoundsInt[rooms.Length];
+        List<BoundsInt> physicalRooms = new List<BoundsInt>();
         for (int i = 0; i < rooms.Length; i++) {
-            physicalRooms[i] = GenerateRoom(rooms[i], floorPositions);
+            physicalRooms.Add(GenerateRoom(rooms[i], floorPositions));
         }
-        for (int i = 0; i < physicalRooms.Length; i++) {
-            int closestIndex = GetClosestRoomIndex(physicalRooms, i);
+        for (int i = 0; i < physicalRooms.Count; i++) {
+            int closestIndex = GetClosestRoomIndex(physicalRooms.ToArray(), i);
             GenerateCorridor(Compress(physicalRooms[i].center), Compress(physicalRooms[closestIndex].center), floorPositions);
         }
 
-        randomSpawnPoint = Compress(physicalRooms[Random.Range(0, physicalRooms.Length)].center);
+        BoundsInt randomRoom = physicalRooms[Random.Range(0, physicalRooms.Count)];
+        physicalRooms.Remove(randomRoom);
+        randomSpawnPoint = Compress(randomRoom.center);
         tilemapVisualizer.PaintFloorTiles(floorPositions);
         navMesh.BuildNavMesh();
-        GetComponent<PopulateDungeon>().Populate(physicalRooms);
+        GetComponent<PopulateDungeon>().Populate(physicalRooms.ToArray());
     }
     
     private BoundsInt[] BinarySpacePartitioning(BoundsInt room) {

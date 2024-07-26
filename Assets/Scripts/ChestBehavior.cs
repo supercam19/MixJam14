@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class ChestBehavior : MonoBehaviour {
@@ -7,7 +6,7 @@ public class ChestBehavior : MonoBehaviour {
     [HideInInspector] public const int GOLD = 1;
     
     private SpriteRenderer sr;
-    private Collider col;
+    private BoxCollider2D col;
     private bool opened = false;
     private int price = 0;
     public int type = WOOD;
@@ -28,10 +27,11 @@ public class ChestBehavior : MonoBehaviour {
             openedWoodChest = sprites[16];
             goldChest = sprites[7];
             openedGoldChest = sprites[8];
-            itemEntityPrefab = Resources.Load<GameObject>("Prefabs/ItemEntity");
+            itemEntityPrefab = Resources.Load<GameObject>("Prefabs/Objects/ItemEntity");
+            initialized = true;
         }
         sr = GetComponent<SpriteRenderer>();
-        col = GetComponent<Collider>();
+        col = GetComponent<BoxCollider2D>();
         price = SetCost();
         if (type == WOOD) {
             closedSprite = woodChest;
@@ -48,7 +48,7 @@ public class ChestBehavior : MonoBehaviour {
         if (!opened) {
             if (GameManager.money >= price) {
                 opened = true;
-                GameManager.money -= price;
+                GameManager.SetBalance(GameManager.money - price);
                 sr.sprite = openSprite;
                 Instantiate(itemEntityPrefab,
                     new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z),
@@ -61,6 +61,10 @@ public class ChestBehavior : MonoBehaviour {
         }
     }
 
+    public void DrawInteractable() {
+        InteractableTip.DrawTip($"Open <color={PriceColor()}>${price}</color>", new Vector3(transform.position.x, transform.position.y + 1, transform.position.z));
+    }
+
     public int GetPrice() {
         if (opened) return -1;
         return price;
@@ -68,5 +72,10 @@ public class ChestBehavior : MonoBehaviour {
 
     private int SetCost() {
         return (5 * GameManager.level) + (20 * (type + 1));
+    }
+
+    private string PriceColor() {
+        if (GameManager.money >= price) return "green";
+        return "red";
     }
 }

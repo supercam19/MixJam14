@@ -7,15 +7,17 @@ TagManager:
   - FriendlyAttack
   - Enemy
   - EnemyAttack
+  - Chest
+  - ItemEntity
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Wall
   - Water
   - UI
-  - 
-  - 
+  - Flying
+  - Interactable
   - 
   - 
   - 
@@ -41,6 +43,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: WorldSpaceUI
+    uniqueID: 758943147
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

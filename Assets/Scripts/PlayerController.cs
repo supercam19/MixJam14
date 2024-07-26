@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
     private PlayerStats stats;
     private Animator animator;
     private SpriteRenderer sr;
+    private ContactFilter2D interactableFilter;
 
     private float sprintingChange = 1;
     private bool dashing = false;
@@ -19,6 +20,8 @@ public class PlayerController : MonoBehaviour {
         stats = GetComponent<PlayerStats>();
         animator = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
+        interactableFilter = new ContactFilter2D();
+        interactableFilter.SetLayerMask(LayerMask.GetMask("Interactable"));
     }
 
     void Update() {
@@ -39,6 +42,27 @@ public class PlayerController : MonoBehaviour {
         animator.SetBool("idle", movingDirection == Vector2.zero);
         if (movingDirection.x != 0) lastNonZeroX = movingDirection.x;
         sr.flipX = lastNonZeroX < 0;
+
+        Collider2D[] interactables = Physics2D.OverlapCircleAll(transform.position, 1, interactableFilter.layerMask);
+        float closestDistance = float.MaxValue;
+        Collider2D closestInteractable = null;
+        foreach (Collider2D col in interactables) {
+            if (Vector2.Distance(col.transform.position, transform.position) < closestDistance) {
+                closestDistance = Vector2.Distance(col.transform.position, transform.position);
+                closestInteractable = col;
+            }
+        }
+
+        if (closestInteractable != null) {
+            if (closestInteractable.gameObject.CompareTag("Chest")) {
+                closestInteractable.gameObject.GetComponent<ChestBehavior>().DrawInteractable();
+                if (Input.GetKeyDown(KeyCode.E)) {
+                    closestInteractable.gameObject.GetComponent<ChestBehavior>().Open();
+                }
+            }
+            else if (closestInteractable.gameObject.CompareTag("ItemEntity"))
+                closestInteractable.gameObject.GetComponent<ItemEntity>().DrawInteractable();
+        }
     }
 
     void FixedUpdate() {
@@ -55,7 +79,7 @@ public class PlayerController : MonoBehaviour {
         float startTime = Time.time;
         dashing = true;
         while (Time.time < startTime + dashTime) {
-            rb.velocity = movingDirection * (100 * stats.speed * Time.deltaTime);
+            rb.velocity = movingDirection * (70 * stats.speed * Time.deltaTime);
             yield return null;
         }
 

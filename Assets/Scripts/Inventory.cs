@@ -16,6 +16,9 @@ public class Inventory : MonoBehaviour {
         if (!item.stackable && items.Contains(item)) {
             
         }
+        else {
+            AddItem(ItemRoller.ReRoll(item.GetRarityInt()));
+        }
     }
 
     private void DoAction(Item item) {

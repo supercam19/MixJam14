@@ -30,6 +30,10 @@ public class ItemEntity : MonoBehaviour {
         this.item = item;
         sr.sprite = item.LoadIcon();
     }
+    
+    public void DrawInteractable() {
+        InteractableTip.DrawTip("Collect", new Vector3(transform.position.x + transform.position.y + 1, transform.position.z));
+    }
 
     public void DrawTooltip() {
         tooltip.SetActive(true);

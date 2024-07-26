@@ -29,4 +29,17 @@ public class Item {
                 return new Color32(255, 255, 255, 255);
         }
     }
+
+    public int GetRarityInt() {
+        switch (rarity) {
+            case "common":
+                return 0;
+            case "rare":
+                return 1;
+            case "legendary":
+                return 2;
+            default:
+                return 0;
+        }
+    }
 }

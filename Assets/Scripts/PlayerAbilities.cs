@@ -14,6 +14,8 @@ public class PlayerAbilities : MonoBehaviour {
     private const byte RIGHT_MOUSE = 1;
     private const byte R_KEY = 2;
     private const byte SPACE_BAR = 3;
+
+    [HideInInspector] public Ability[] abilities;
     
     public void OnLeftMouse() {
         if (leftMouseAbility.Equals("Magic Bolt")) {
@@ -26,8 +28,11 @@ public class PlayerAbilities : MonoBehaviour {
     }
 
     public void OnSpaceBar() {
-        if (spaceBarAbility.Equals("Dash")) {
-            StartCoroutine(controller.Dash(0.15f));
+        if (Time.time - spaceBarAbility.cooldown > spaceBarAbility.lastUseTime) {
+            if (spaceBarAbility.Equals("Dash")) {
+                StartCoroutine(controller.Dash(0.15f));
+                Use(spaceBarAbility);
+            }
         }
     }
 
@@ -36,6 +41,7 @@ public class PlayerAbilities : MonoBehaviour {
     }
 
     void Start() {
+        abilities = new Ability[] { leftMouseAbility, rightMouseAbility, rKeyAbility, spaceBarAbility };
         controller = GetComponent<PlayerController>();
         stats = GetComponent<PlayerStats>();
         leftMouseAbility.prefab = Resources.Load<GameObject>("Prefabs/Projectiles/MagicBoltProjectile");

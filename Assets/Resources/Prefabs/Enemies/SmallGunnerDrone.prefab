@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6947400590167189317}
   - component: {fileID: 6947400590167189318}
   - component: {fileID: 7166146681489076413}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SmallGunnerDrone
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 35
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -128,7 +128,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &6947400590167189318
 BoxCollider2D:
   m_ObjectHideFlags: 0

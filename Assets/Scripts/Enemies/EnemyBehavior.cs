@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class EnemyBehavior : MonoBehaviour {
     protected float health = 100;
     protected float maxHealth = 100;
-    protected float speed = 400;
+    protected float speed = 100;
     protected float damage = 10;
     protected bool canFly = false;
     protected bool ranged = false;
@@ -23,16 +23,23 @@ public class EnemyBehavior : MonoBehaviour {
     protected NavMeshAgent agent;
     protected Transform playerTransform;
     protected PlayerBehavior playerBehavior;
+    protected PlayerStats stats;
     protected Rigidbody2D rb;
+    protected SpriteRenderer sr;
 
     private float lastTickTime;
+    private const float tickRate = 0.1f;
+    private bool moving = false;
+    private Vector3 destination;
 
     protected void Initialize() {
         player = GameObject.Find("Player");
         playerTransform = player.transform;
         playerBehavior = player.GetComponent<PlayerBehavior>();
+        stats = player.GetComponent<PlayerStats>();
         rb = GetComponent<Rigidbody2D>();
-        lastTickTime = Random.Range(0, 100);
+        sr = GetComponent<SpriteRenderer>();
+        lastTickTime = Random.Range(0, 0.1f);
         if (!canFly) {
             agent = GetComponent<NavMeshAgent>();
             agent.stoppingDistance = attackRange;
@@ -41,13 +48,16 @@ public class EnemyBehavior : MonoBehaviour {
     }
 
     void Update() {
-        if (Time.time - lastTickTime > 0) {
+        if (Time.time - lastTickTime > tickRate) {
             Tick();
             lastTickTime = Time.time;
         }
+        if (moving)
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(destination.x, destination.y, 0), speed * Time.deltaTime);
     }
 
     protected virtual void Tick() {
+        moving = false;
         if (followingPlayer) { 
             if (health / maxHealth < selfPreservation) {
                 Vector3 awayVector = transform.position - playerTransform.position;
@@ -55,7 +65,6 @@ public class EnemyBehavior : MonoBehaviour {
             }
             else if (Vector2.Distance(transform.position, playerTransform.position) > followRange) {
                 followingPlayer = false;
-                agent.isStopped = true;
             }
             else if (Vector2.Distance(transform.position, playerTransform.position) < attackRange && CanAttack()) {
                 Attack();
@@ -81,8 +90,10 @@ public class EnemyBehavior : MonoBehaviour {
             agent.SetDestination(position);
         }
         else {
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(position.x, position.y, 0), speed * Time.deltaTime);
+            moving = true;
+            destination = position + (transform.position - position).normalized * attackRange;
         }
+        sr.flipX = position.x > transform.position.x;
     }
 
     protected virtual void Attack() {
@@ -90,7 +101,10 @@ public class EnemyBehavior : MonoBehaviour {
     }
 
     public virtual void TakeDamage(float damage) {
-        hasBeenHit = true;
+        if (!hasBeenHit) {
+            damage *= stats.firstHitMultiplier;
+            hasBeenHit = true;
+        }
         health -= damage;
         if (health <= 0) {
             Die();
