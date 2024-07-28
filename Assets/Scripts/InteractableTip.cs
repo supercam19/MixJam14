@@ -17,4 +17,9 @@ public class InteractableTip : MonoBehaviour
         interactableTip.transform.position = position;
         tipText.text = text;
     }
+    
+    public static void HideTip() {
+        if (interactableTip != null)
+            interactableTip.SetActive(false);
+    }
 }

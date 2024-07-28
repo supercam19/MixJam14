@@ -1,0 +1,11 @@
+﻿{
+  "name": "Relic Necklace",
+  "description": "Reduces the cooldown of the right click ability by 15%",
+  "icon": "relic_necklace",
+  "rarity": "rare",
+  "function": {
+    "name": "rightMouseAbilityCooldownReduction",
+    "change": 0.85,
+    "operation": "multiply"
+  }
+}

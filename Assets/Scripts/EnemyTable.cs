@@ -4,14 +4,14 @@ using UnityEngine;
 
 [System.Serializable]
 public class EnemyTable {
-    private float smallGunnerDrone;
+    public float smallGunnerDrone = 0.9f;
+    public float bomberDrone = 0.1f;
 
-    public float[] enemyChances;
-
-    void Start() {
-        enemyChances = new float[1] {
-            smallGunnerDrone
-        };
+    public string GetRandomEnemyWeighed() {
+        float rng = Random.value;
+        if (rng < smallGunnerDrone) return "SmallGunnerDrone";
+        if (rng < smallGunnerDrone + bomberDrone) return "BomberDrone";
+        return "SmallGunnerDrone";
     }
 
     public static EnemyTable LoadFromJSON(string jsonString) {

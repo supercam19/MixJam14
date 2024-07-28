@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour {
     private ContactFilter2D interactableFilter;
 
     private float sprintingChange = 1;
-    private bool dashing = false;
+    public bool dashing = false;
     private Vector2 movingDirection;
     private float lastNonZeroX = 1;
     void Start() {
@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
+        if (GameManager.paused) return;
         if (Input.GetMouseButtonDown(0)) abilities.OnLeftMouse();
         if (Input.GetMouseButtonDown(1)) abilities.OnRightMouse();
         if (Input.GetKeyDown(KeyCode.Space)) abilities.OnSpaceBar();
@@ -54,14 +55,11 @@ public class PlayerController : MonoBehaviour {
         }
 
         if (closestInteractable != null) {
-            if (closestInteractable.gameObject.CompareTag("Chest")) {
-                closestInteractable.gameObject.GetComponent<ChestBehavior>().DrawInteractable();
-                if (Input.GetKeyDown(KeyCode.E)) {
-                    closestInteractable.gameObject.GetComponent<ChestBehavior>().Open();
-                }
-            }
-            else if (closestInteractable.gameObject.CompareTag("ItemEntity"))
-                closestInteractable.gameObject.GetComponent<ItemEntity>().DrawInteractable();
+            closestInteractable.GetComponent<InteractableObject>().DrawTip();
+            if (Input.GetKeyDown(KeyCode.E)) closestInteractable.GetComponent<InteractableObject>().Interact();
+        }
+        else {
+            InteractableTip.HideTip();
         }
     }
 
@@ -79,7 +77,7 @@ public class PlayerController : MonoBehaviour {
         float startTime = Time.time;
         dashing = true;
         while (Time.time < startTime + dashTime) {
-            rb.velocity = movingDirection * (70 * stats.speed * Time.deltaTime);
+            rb.velocity = movingDirection * (40 * stats.speed * Time.deltaTime);
             yield return null;
         }
 

@@ -1,0 +1,11 @@
+﻿{
+  "name": "Relic Band",
+  "description": "Reduces the cooldown for the space bar ability by 10%",
+  "icon": "relic_band",
+  "rarity": "common",
+  "function": {
+    "name": "spaceBarAbilityCooldownReduction",
+    "change": 0.9,
+    "operation": "multiply"
+  }
+}

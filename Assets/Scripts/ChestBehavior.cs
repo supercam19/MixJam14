@@ -1,7 +1,7 @@
 using UnityEngine.UI;
 using UnityEngine;
 
-public class ChestBehavior : MonoBehaviour {
+public class ChestBehavior : InteractableObject {
     [HideInInspector] public const int WOOD = 0;
     [HideInInspector] public const int GOLD = 1;
     
@@ -44,7 +44,7 @@ public class ChestBehavior : MonoBehaviour {
         sr.sprite = closedSprite;
     }
 
-    public void Open() {
+    public override void Interact() {
         if (!opened) {
             if (GameManager.money >= price) {
                 opened = true;
@@ -52,7 +52,7 @@ public class ChestBehavior : MonoBehaviour {
                 sr.sprite = openSprite;
                 Instantiate(itemEntityPrefab,
                     new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z),
-                    Quaternion.identity);
+                    Quaternion.identity).GetComponent<ItemEntity>().SetItem(ItemRoller.RollItem(type));
                 col.enabled = false;
             }
             else {
@@ -61,7 +61,7 @@ public class ChestBehavior : MonoBehaviour {
         }
     }
 
-    public void DrawInteractable() {
+    public override void DrawTip() {
         InteractableTip.DrawTip($"Open <color={PriceColor()}>${price}</color>", new Vector3(transform.position.x, transform.position.y + 1, transform.position.z));
     }
 

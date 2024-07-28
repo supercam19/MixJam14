@@ -1,5 +1,6 @@
 using UnityEngine.Audio;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SoundManager : MonoBehaviour {
@@ -24,6 +25,14 @@ public class SoundManager : MonoBehaviour {
         src.pitch += Random.Range(1 - pitchVariance, 1 + pitchVariance);
         src.Play();
         Destroy(src, src.clip.length);
+    }
+
+    public static void PlayAtVolume(GameObject obj, AudioClip clip, float volume) {
+        AudioSource src = CreateSource(obj, false);
+        src.volume = volume;
+        src.clip = clip;
+        src.Play();
+        Destroy(src, clip.length);
     }
 
     public static void SetVolume(float newVolume, int type) {

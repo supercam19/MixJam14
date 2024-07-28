@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Item {
@@ -8,6 +9,8 @@ public class Item {
     public string rarity;
     public bool stackable = true;
     public ItemModifier function;
+    public int count;
+    public Text inventoryItemCount;
 
     public static Item CreateFromJSON(string jsonString) {
         return JsonUtility.FromJson<Item>(jsonString);
@@ -41,5 +44,11 @@ public class Item {
             default:
                 return 0;
         }
+    }
+
+    public void SetCount(int count) {
+        this.count = count;
+        if (inventoryItemCount != null)
+            inventoryItemCount.text = count.ToString();
     }
 }

@@ -1,3 +1,4 @@
 ﻿{
-  "smallGunnerDrone": 1
+  "smallGunnerDrone": 0.9,
+  "bomberDrone": 0.1
 }

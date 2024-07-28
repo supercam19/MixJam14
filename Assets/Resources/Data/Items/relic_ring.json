@@ -1,0 +1,11 @@
+﻿{
+  "name": "Relic Ring",
+  "description": "Reduces the cooldown of the left click ability by 10%",
+  "icon": "relic_ring",
+  "rarity": "common",
+  "function": {
+    "name": "leftMouseAbilityCooldownReduction",
+    "change": 0.9,
+    "operation": "multiply"
+  }
+}

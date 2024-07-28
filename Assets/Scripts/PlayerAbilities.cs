@@ -7,7 +7,6 @@ public class PlayerAbilities : MonoBehaviour {
     [HideInInspector] public Ability spaceBarAbility = new Ability("Dash", 1.5f, SPACE_BAR, null);
 
     private PlayerController controller;
-    private GameObject magicBoltPrefab;
     private PlayerStats stats;
     
     private const byte LEFT_MOUSE = 0;
@@ -16,15 +15,33 @@ public class PlayerAbilities : MonoBehaviour {
     private const byte SPACE_BAR = 3;
 
     [HideInInspector] public Ability[] abilities;
+    private float[] abilityCooldownReductions = new float[4];
+    
+    private string[] magicBoltSounds = new string[] {"magic_bolt_1", "magic_bolt_2", "magic_bolt_3", "magic_bolt_4"};
     
     public void OnLeftMouse() {
-        if (leftMouseAbility.Equals("Magic Bolt")) {
-            
+        if (Time.time - leftMouseAbility.cooldown > leftMouseAbility.lastUseTime) {
+            if (leftMouseAbility.Equals("Magic Bolt")) {
+                ProjectileBehavior bolt = Instantiate(leftMouseAbility.prefab, transform.position, Quaternion.identity)
+                    .GetComponent<ProjectileBehavior>();
+                bolt.Fire((Utility.GetMousePosition() - transform.position).normalized);
+                SoundManager.Play(gameObject, magicBoltSounds);
+                Use(leftMouseAbility);
+            }
         }
     }
 
     public void OnRightMouse() {
-        
+        if (Time.time - rightMouseAbility.cooldown > rightMouseAbility.lastUseTime) {
+            if (rightMouseAbility.Equals("Fireball")) {
+                ProjectileBehavior fireball =
+                    Instantiate(rightMouseAbility.prefab, transform.position, Quaternion.identity)
+                        .GetComponent<ProjectileBehavior>();
+                fireball.Fire((Utility.GetMousePosition() - transform.position).normalized);
+                SoundManager.Play(gameObject, "fireball_summon");
+                Use(rightMouseAbility);
+            }
+        }
     }
 
     public void OnSpaceBar() {
@@ -37,18 +54,31 @@ public class PlayerAbilities : MonoBehaviour {
     }
 
     public void OnRKey() {
-        
+        if (Time.time - rKeyAbility.cooldown > rKeyAbility.lastUseTime) {
+            Instantiate(Resources.Load<GameObject>("Prefabs/Projectiles/LightningBolt"), Utility.GetLocalMouse(),
+                Quaternion.identity).GetComponent<LightningBolt>().Strike(5);
+            Use(rKeyAbility);
+        }
     }
 
     void Start() {
         abilities = new Ability[] { leftMouseAbility, rightMouseAbility, rKeyAbility, spaceBarAbility };
-        controller = GetComponent<PlayerController>();
         stats = GetComponent<PlayerStats>();
+        abilityCooldownReductions = new float[] {stats.leftMouseAbilityCooldownReduction, stats.rightMouseAbilityCooldownReduction, stats.rKeyAbilityCooldownReduction, stats.spaceBarAbilityCooldownReduction};
+        controller = GetComponent<PlayerController>();
         leftMouseAbility.prefab = Resources.Load<GameObject>("Prefabs/Projectiles/MagicBoltProjectile");
+        rightMouseAbility.prefab = Resources.Load<GameObject>("Prefabs/Projectiles/FireballProjectile");
     }
     
     private void Use(Ability ability) {
         ability.lastUseTime = Time.time;
-        ability.cooldown = ability.baseCooldown * stats.abilityCooldownReduction[ability.keyAssociation];
+        ability.cooldown = ability.baseCooldown * abilityCooldownReductions[ability.keyAssociation];
+    }
+
+    public void Reset() {
+        leftMouseAbility.lastUseTime = 0;
+        rightMouseAbility.lastUseTime = 0;
+        rKeyAbility.lastUseTime = 0;
+        spaceBarAbility.lastUseTime = 0;
     }
 }

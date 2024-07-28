@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,17 +8,29 @@ public class Inventory : MonoBehaviour {
     public List<Item> items = new List<Item>();
 
     private PlayerStats stats;
+    private GameObject uiItem;
+    private GameObject inventoryUI;
     
     void Start() {
         stats = GetComponent<PlayerStats>();
+        uiItem = Resources.Load<GameObject>("Prefabs/Objects/InventoryItem");
+        inventoryUI = GameObject.Find("Inventory");
     }
 
     public void AddItem(Item item) {
         if (!item.stackable && items.Contains(item)) {
-            
+            AddItem(ItemRoller.ReRoll(item.GetRarityInt()));
         }
         else {
-            AddItem(ItemRoller.ReRoll(item.GetRarityInt()));
+            if (items.Contains(item)) {
+                items[items.IndexOf(item)].SetCount(items[items.IndexOf(item)].count + 1);
+            }
+            else {
+                item.SetCount(1);
+                items.Add(item);
+                Instantiate(uiItem, inventoryUI.transform).GetComponent<InventoryUIItem>().Setup(item, items.Count - 1);
+            }
+            DoAction(item);
         }
     }
 

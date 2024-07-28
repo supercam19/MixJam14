@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3482537756882444960}
   - component: {fileID: 5786471026395661583}
   - component: {fileID: 2057511904533231934}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Bullet
   m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: -4
   m_Sprite: {fileID: -14408984, guid: 84d0e1a81dbd63340a0a82cbe83b9446, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFriendly: 0
-  speed: 1000
-  damage: 10
+  speed: 5000
+  damageMultiplier: 1
   isAOE: 0
   aoePrefab: {fileID: 0}

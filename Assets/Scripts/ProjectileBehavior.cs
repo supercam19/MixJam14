@@ -17,7 +17,7 @@ public class ProjectileBehavior : MonoBehaviour {
     
     public void Fire(Vector3 direction, float speed = -1) {
         if (speed == -1) speed = this.speed;
-        transform.rotation = Utility.RotateToPoint(transform.position, direction);
+        transform.rotation = Utility.RotateToPoint(transform.position, transform.position + direction);
         movement = direction * speed;
         startTime = Time.time;
     }
@@ -34,12 +34,13 @@ public class ProjectileBehavior : MonoBehaviour {
         }
     }
 
-    void OnCollisionEnter2D(Collision2D other) {
+    void OnTriggerEnter2D(Collider2D other) {
+        if (other.gameObject.GetComponent<ProjectileBehavior>() != null || other.gameObject.CompareTag("Chest")) return;
         if (isAOE) {
-            GetComponent<AOEBehavior>().SpawnAOE(transform.position);
+            Instantiate(aoePrefab, transform.position, Quaternion.identity).GetComponent<AOEBehavior>().SpawnAOE(transform.position, stats.damage * damageMultiplier, 1.5f, 0.5f, isFriendly);
         }
         else if (other.gameObject.CompareTag("Player") && !isFriendly) {
-            other.gameObject.GetComponent<PlayerBehavior>().TakeDamage(stats.damage * damageMultiplier);
+            other.gameObject.GetComponent<PlayerBehavior>().TakeDamage(damageMultiplier);
         }
         else if (other.gameObject.CompareTag("Enemy") && isFriendly) {
             other.gameObject.GetComponent<EnemyBehavior>().TakeDamage(stats.damage * damageMultiplier);

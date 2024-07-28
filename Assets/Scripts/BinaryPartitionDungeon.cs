@@ -13,6 +13,9 @@ public class BinaryPartitionDungeon : MonoBehaviour {
     [SerializeField] private int maxPhysicalRoomSize;
     [SerializeField] private int minPhysicalRoomSize;
     [SerializeField] private NavMeshSurface navMesh;
+    [SerializeField] private GameObject altar;
+    [SerializeField] private Tilemap outOfBounds;
+    [SerializeField] private TileBase outOfBoundsTile;
     
     private HashSet<Vector2Int> floorPositions;
     [HideInInspector] public Vector2Int randomSpawnPoint;
@@ -39,7 +42,16 @@ public class BinaryPartitionDungeon : MonoBehaviour {
         BoundsInt randomRoom = physicalRooms[Random.Range(0, physicalRooms.Count)];
         physicalRooms.Remove(randomRoom);
         randomSpawnPoint = Compress(randomRoom.center);
+        altar.transform.position = randomRoom.center + new Vector3(0, 1, 0);
         tilemapVisualizer.PaintFloorTiles(floorPositions);
+        outOfBounds.ClearAllTiles();
+        for (int i = dungeonArea.x; i < dungeonArea.xMax; i++) {
+            for (int j = dungeonArea.y; j < dungeonArea.yMax; j++) {
+                if (!floorPositions.Contains(new Vector2Int(i, j))) {
+                    outOfBounds.SetTile(new Vector3Int(i, j, 0), outOfBoundsTile);
+                }
+            }
+        }
         navMesh.BuildNavMesh();
         GetComponent<PopulateDungeon>().Populate(physicalRooms.ToArray());
     }

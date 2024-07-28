@@ -8,20 +8,26 @@ public class PopulateDungeon : MonoBehaviour {
     private EnemyTable enemyTypes;
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private GameObject chestPrefab;
+    [SerializeField] private GameObject challengeChestPrefab;
     [SerializeField] private Tilemap tilemap;
+    [SerializeField] private Transform player;
+
+    private BoundsInt[] rooms;
+    private List<Vector3> occupied;
     
     
     public void Populate(BoundsInt[] rooms) {
+        this.rooms = rooms;
         Start();
         int x = 0;
+        occupied = new List<Vector3>();
         foreach (BoundsInt room in rooms) {
             int roomType = SelectRoomType();
             int spawns = (int)Random.Range(roomTypes[roomType].spawnMinimum, roomTypes[roomType].spawnMaximum);
-            List<Vector3> occupied = new List<Vector3>();
             for (int i = 0; i < spawns; i++) {
                 float rng = Random.value;
-                Vector3 spawnpoint;
-                while (true) {
+                Vector3 spawnpoint = Vector3.zero;
+                while (x < 1000) {
                     x++;
                     spawnpoint = PickRandomTile(room);
                     if (!occupied.Contains(spawnpoint)) {
@@ -36,16 +42,19 @@ public class PopulateDungeon : MonoBehaviour {
                     ChestBehavior chest = Instantiate(chestPrefab, spawnpoint, Quaternion.identity)
                         .GetComponent<ChestBehavior>();
                     chest.type = ChestBehavior.WOOD;
-                    GameManager.activeChests.Add(chest);
+                    GameManager.activeChests.Add(chest.gameObject);
                 }
                 else if (rng < roomTypes[roomType].goldChestChance + roomTypes[roomType].woodChestChance + roomTypes[roomType].enemyChance) {
                     ChestBehavior chest = Instantiate(chestPrefab, spawnpoint, Quaternion.identity)
                         .GetComponent<ChestBehavior>();
                     chest.type = ChestBehavior.GOLD;
-                    GameManager.activeChests.Add(chest);
+                    GameManager.activeChests.Add(chest.gameObject);
                 }
                 else {
-                    Debug.Log("Implement - Challenge chest");
+                    ChallengeChest chest = Instantiate(challengeChestPrefab, new Vector3((int)room.center.x, (int)room.center.y, 0),
+                        Quaternion.identity).GetComponent<ChallengeChest>();
+                    chest.Setup(room);
+                    GameManager.activeChests.Add(chest.gameObject);
                 }
             }
         }
@@ -57,8 +66,25 @@ public class PopulateDungeon : MonoBehaviour {
         for (int i = 0; i < roomTypesJson.Length; i++) {
             roomTypes[i] = RoomType.LoadFromJSON(roomTypesJson[i].ToString());
         }
-        enemyTypes = EnemyTable.LoadFromJSON(Resources.Load<TextAsset>("Data/LootTables/enemy_spawns").ToString());
-        
+
+        enemyTypes = new EnemyTable();
+
+    }
+
+    void Update() {
+        if (rooms == null) {
+            Debug.LogWarning("rooms is null");
+            return;
+        }
+        if (GameManager.activeEnemies.Count < 20) {
+            if (Random.value < Time.deltaTime) {
+                int room = Random.Range(0, rooms.Length);
+                Vector3 spawnpoint = PickRandomTile(rooms[room]);
+                if (!occupied.Contains(spawnpoint) && Vector2.Distance(spawnpoint, player.position) > 10) {
+                    SpawnRandomEnemy(spawnpoint);
+                }
+            }
+        }
     }
 
     private int SelectRoomType() {
@@ -82,6 +108,7 @@ public class PopulateDungeon : MonoBehaviour {
     }
 
     private void SpawnRandomEnemy(Vector3 spawnpoint) {
-        GameManager.activeEnemies.Add(Instantiate(enemyPrefab, spawnpoint, Quaternion.identity).GetComponent<EnemyBehavior>());
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/Enemies/" + enemyTypes.GetRandomEnemyWeighed());
+        GameManager.activeEnemies.Add(Instantiate(prefab, spawnpoint, Quaternion.identity).GetComponent<EnemyBehavior>());
     }
 }

@@ -18,6 +18,7 @@ public class ItemRoller : MonoBehaviour {
 
     public static Item RollItem(int chestType) {
         int rarity = lootTables[chestType].RollRarity();
+        itemsByRarity = new List<Item>[] { commonItems, rareItems, legendaryItems };
         return itemsByRarity[rarity][Random.Range(0, itemsByRarity[rarity].Count)];
     }
 
@@ -25,7 +26,7 @@ public class ItemRoller : MonoBehaviour {
         return itemsByRarity[rarity][Random.Range(0, itemsByRarity[rarity].Count)];
     }
 
-    void Start() {
+    public static void Initialize() {
         for (int i = 0; i < 3; i++) {
             lootTables[i] = LootTable.CreateFromJSON(Resources.Load<TextAsset>("Data/LootTables/" + lootTableResources[i]).ToString());
         }

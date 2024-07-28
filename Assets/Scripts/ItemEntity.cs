@@ -3,36 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemEntity : MonoBehaviour {
+public class ItemEntity : InteractableObject {
     public Item item;
     private SpriteRenderer sr;
     private GameObject tooltip;
     private bool markedForDestroy = false;
+    private Inventory inv;
+    private Sprite icon;
+    private Vector3 startPos;
+    private int frames;
 
     void Start() {
         sr = GetComponent<SpriteRenderer>();
         tooltip = GameObject.Find("Tooltip");
+        inv = GameObject.Find("Player").GetComponent<Inventory>();
+        sr.sprite = icon;
+        startPos = transform.position;
     }
 
     void Update() {
-        transform.position = new Vector3(transform.position.x,
-            transform.position.y + 0.5f * Mathf.Sin(Time.time / 500),
-            transform.position.z);
+        transform.position = startPos + new Vector3(0, 0.25f * Mathf.Sin((float)frames / 300), 0);
         if (markedForDestroy) Destroy(gameObject);
+        frames++;
     }
 
-    public Item Collect() {
+    public override void Interact() {
         markedForDestroy = true;
-        return item;
+        inv.AddItem(item);
     }
 
     public void SetItem(Item item) {
         this.item = item;
-        sr.sprite = item.LoadIcon();
+        icon = item.LoadIcon();
     }
     
-    public void DrawInteractable() {
-        InteractableTip.DrawTip("Collect", new Vector3(transform.position.x + transform.position.y + 1, transform.position.z));
+    public override void DrawTip() {
+        InteractableTip.DrawTip("Collect", startPos);
     }
 
     public void DrawTooltip() {

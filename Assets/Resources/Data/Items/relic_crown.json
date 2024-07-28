@@ -1,0 +1,11 @@
+﻿{
+  "name": "Relic Crown",
+  "description": "Reduces the cooldown for the R button ability by 20%",
+  "icon": "relic_crown",
+  "rarity": "legendary",
+  "function": {
+    "name": "rKeyAbilityCooldownReduction",
+    "change": 0.8,
+    "operation": "multiply"
+  }
+}
