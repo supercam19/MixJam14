@@ -15,6 +15,10 @@ public class PlayerBehavior : MonoBehaviour {
     }
     public void TakeDamage(float damage) {
         if (stats.invincible) return;
+        if (Random.value > stats.wontDodgeChance) {
+            damage = 0;
+            SoundManager.Play(gameObject, "block_attack", pitchVariance: 0.1f);
+        }
         stats.health -= damage * stats.damageReduction * stats.sprintDamageReduction;
         healthBar.SetHealth(stats.health, stats.maxHealth);
         if (stats.health <= 0) {
@@ -28,6 +32,14 @@ public class PlayerBehavior : MonoBehaviour {
     }
 
     private void Die() {
+        if (stats.cheatDeaths > 0) {
+            stats.cheatDeaths--;
+            stats.health = stats.maxHealth;
+            healthBar.SetHealth(stats.health, stats.maxHealth);
+            GetComponent<Inventory>().RemoveItem("Phoenix's Feather", 1);
+            SoundManager.Play(gameObject, "phoenix_feather_use");
+            return;
+        }
         GameManager.paused = true;
         Time.timeScale = 0;
         gameOver.SetActive(true);

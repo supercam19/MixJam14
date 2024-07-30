@@ -14,12 +14,16 @@ public class ProjectileBehavior : MonoBehaviour {
     private Vector3 movement;
     private float lifeTime = 5;
     private float startTime;
+    private Bounds cameraViewOnFire;
     
-    public void Fire(Vector3 direction, float speed = -1) {
+    public void Fire(Vector2 direction, float speed = -1) {
         if (speed == -1) speed = this.speed;
-        transform.rotation = Utility.RotateToPoint(transform.position, transform.position + direction);
-        movement = direction * speed;
+        transform.rotation = Utility.RotateToPoint(transform.position, (Vector2)transform.position + direction);
+        movement = direction.normalized * speed;
         startTime = Time.time;
+        Vector2 center = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 0.5f));
+        cameraViewOnFire = new Bounds(center, Camera.main.ViewportToWorldPoint(new Vector2(1, 1)) - Camera.main.ViewportToWorldPoint(new Vector2(0, 0)));
+        Debug.Log(cameraViewOnFire.ToString());
     }
 
     void Start() {
@@ -29,7 +33,7 @@ public class ProjectileBehavior : MonoBehaviour {
 
     void Update() {
         rb.velocity = movement * Time.deltaTime;
-        if (Time.time - startTime > lifeTime) {
+        if (Time.time - startTime > lifeTime || isFriendly && !cameraViewOnFire.Contains(new Vector3Int((int)transform.position.x, (int)transform.position.y, 0))) {
             Die();
         }
     }

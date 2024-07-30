@@ -1,5 +1,5 @@
 ﻿{
-  "commonChance": 0.8,
-  "rareChance": 0.18,
-  "legendaryChance": 0.02
+  "commonChance": 0.75,
+  "rareChance": 0.22,
+  "legendaryChance": 0.03
 }

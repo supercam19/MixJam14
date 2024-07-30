@@ -8,6 +8,7 @@ public class PlayerAbilities : MonoBehaviour {
 
     private PlayerController controller;
     private PlayerStats stats;
+    private Animator animator;
     
     private const byte LEFT_MOUSE = 0;
     private const byte RIGHT_MOUSE = 1;
@@ -24,7 +25,7 @@ public class PlayerAbilities : MonoBehaviour {
             if (leftMouseAbility.Equals("Magic Bolt")) {
                 ProjectileBehavior bolt = Instantiate(leftMouseAbility.prefab, transform.position, Quaternion.identity)
                     .GetComponent<ProjectileBehavior>();
-                bolt.Fire((Utility.GetMousePosition() - transform.position).normalized);
+                bolt.Fire(Utility.GetMousePosition() - transform.position);
                 SoundManager.Play(gameObject, magicBoltSounds);
                 Use(leftMouseAbility);
             }
@@ -37,7 +38,7 @@ public class PlayerAbilities : MonoBehaviour {
                 ProjectileBehavior fireball =
                     Instantiate(rightMouseAbility.prefab, transform.position, Quaternion.identity)
                         .GetComponent<ProjectileBehavior>();
-                fireball.Fire((Utility.GetMousePosition() - transform.position).normalized);
+                fireball.Fire(Utility.GetMousePosition() - transform.position);
                 SoundManager.Play(gameObject, "fireball_summon");
                 Use(rightMouseAbility);
             }
@@ -49,6 +50,7 @@ public class PlayerAbilities : MonoBehaviour {
             if (spaceBarAbility.Equals("Dash")) {
                 StartCoroutine(controller.Dash(0.15f));
                 Use(spaceBarAbility);
+                SoundManager.Play(gameObject, "dash", pitchVariance: 0.1f);
             }
         }
     }
@@ -64,6 +66,7 @@ public class PlayerAbilities : MonoBehaviour {
     void Start() {
         abilities = new Ability[] { leftMouseAbility, rightMouseAbility, rKeyAbility, spaceBarAbility };
         stats = GetComponent<PlayerStats>();
+        animator = GetComponent<Animator>();
         abilityCooldownReductions = new float[] {stats.leftMouseAbilityCooldownReduction, stats.rightMouseAbilityCooldownReduction, stats.rKeyAbilityCooldownReduction, stats.spaceBarAbilityCooldownReduction};
         controller = GetComponent<PlayerController>();
         leftMouseAbility.prefab = Resources.Load<GameObject>("Prefabs/Projectiles/MagicBoltProjectile");
@@ -73,6 +76,12 @@ public class PlayerAbilities : MonoBehaviour {
     private void Use(Ability ability) {
         ability.lastUseTime = Time.time;
         ability.cooldown = ability.baseCooldown * abilityCooldownReductions[ability.keyAssociation];
+        animator.SetBool("casting", true);
+        Invoke(nameof(EndCastAnimation), 0.75f);
+    }
+    
+    private void EndCastAnimation() {
+        animator.SetBool("casting", false);
     }
 
     public void Reset() {

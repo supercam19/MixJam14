@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour {
     void Update() {
         if (GameManager.paused) return;
         if (Input.GetMouseButtonDown(0)) abilities.OnLeftMouse();
-        if (Input.GetMouseButtonDown(1)) abilities.OnRightMouse();
+        if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Q)) abilities.OnRightMouse();
         if (Input.GetKeyDown(KeyCode.Space)) abilities.OnSpaceBar();
         if (Input.GetKeyDown(KeyCode.R)) abilities.OnRKey();
 
@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour {
         }
         
         animator.SetBool("idle", movingDirection == Vector2.zero);
+        animator.SetFloat("moveSpeed", stats.sprintMultiplier);
         if (movingDirection.x != 0) lastNonZeroX = movingDirection.x;
         sr.flipX = lastNonZeroX < 0;
 
@@ -77,7 +78,7 @@ public class PlayerController : MonoBehaviour {
         float startTime = Time.time;
         dashing = true;
         while (Time.time < startTime + dashTime) {
-            rb.velocity = movingDirection * (40 * stats.speed * Time.deltaTime);
+            rb.velocity = movingDirection * (20 * stats.speed * Time.deltaTime);
             yield return null;
         }
 

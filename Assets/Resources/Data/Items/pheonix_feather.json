@@ -1,0 +1,11 @@
+﻿{
+  "name": "Phoenix's Feather",
+  "description": "Cheat death, restoring you to full health. Consumed on use.",
+  "icon": "phoenix_feather",
+  "rarity": "legendary",
+  "function": {
+    "name": "cheatDeaths",
+    "change": 1,
+    "operation": "add"
+  }
+}

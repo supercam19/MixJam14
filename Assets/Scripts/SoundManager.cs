@@ -19,12 +19,13 @@ public class SoundManager : MonoBehaviour {
         Destroy(src, src.clip.length);
     }
     
-    public static void Play(GameObject obj, string[] resourceNames, bool isMusic = false, float pitchVariance = 0) {
+    public static float Play(GameObject obj, string[] resourceNames, bool isMusic = false, float pitchVariance = 0) {
         AudioSource src = CreateSource(obj, isMusic);
         src.clip = LoadResource(resourceNames[Random.Range(0, resourceNames.Length - 1)]);
         src.pitch += Random.Range(1 - pitchVariance, 1 + pitchVariance);
         src.Play();
         Destroy(src, src.clip.length);
+        return src.clip.length;
     }
 
     public static void PlayAtVolume(GameObject obj, AudioClip clip, float volume) {
@@ -39,21 +40,25 @@ public class SoundManager : MonoBehaviour {
         if (type == 0) {
             masterVolume = newVolume;
             foreach (AudioSource src in musicSources) {
+                if (src == null) continue;
                 src.volume = masterVolume * musicVolume;
             }
             foreach (AudioSource src in sfxSources) {
+                if (src == null) continue;
                 src.volume = masterVolume * sfxVolume;
             }
         }
         else if (type == 1) {
             sfxVolume = newVolume;
             foreach (AudioSource src in sfxSources) {
+                if (src == null) continue;
                 src.volume = masterVolume * sfxVolume;
             }
         }
         else if (type == 2) {
             musicVolume = newVolume;
             foreach (AudioSource src in musicSources) {
+                if (src == null) continue;
                 src.volume = masterVolume * musicVolume;
             }
         }

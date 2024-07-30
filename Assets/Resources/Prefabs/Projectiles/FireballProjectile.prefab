@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFriendly: 1
-  speed: 3500
+  speed: 600
   damageMultiplier: 2.5
   isAOE: 1
   aoePrefab: {fileID: 433649361481757179, guid: 5b57b891fd41cbc49b7308da859a5926, type: 3}

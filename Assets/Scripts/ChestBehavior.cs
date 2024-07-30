@@ -54,9 +54,10 @@ public class ChestBehavior : InteractableObject {
                     new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z),
                     Quaternion.identity).GetComponent<ItemEntity>().SetItem(ItemRoller.RollItem(type));
                 col.enabled = false;
+                SoundManager.Play(gameObject, "chest_open", pitchVariance: 0.1f);
             }
             else {
-                // Sound effect
+                SoundManager.Play(gameObject, "deny");
             }
         }
     }

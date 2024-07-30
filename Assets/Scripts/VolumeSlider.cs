@@ -5,14 +5,12 @@ using UnityEngine;
 public class VolumeSlider : MonoBehaviour {
     [SerializeField] private int soundType;
     private AudioClip uiTick;
-    public void OnSliderChange()
+    public void OnSliderChange(float input)
     {
         float value = GetComponent<UnityEngine.UI.Slider>().value;
-        if (soundType == 0) {
-            SoundManager.SetVolume(value, soundType);
-            if (soundType != 0) value *= SoundManager.masterVolume;
-            AudioSource.PlayClipAtPoint(uiTick, GameObject.Find("Player").transform.position, value);
-        }
+        SoundManager.SetVolume(value, soundType);
+        SoundManager.Play(GameObject.Find("Player"), "ui_tick");
+        
     }
 
     void Start() {

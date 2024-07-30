@@ -1,0 +1,11 @@
+﻿{
+  "name": "Golden Heart",
+  "description": "Regenerate +1.5 health per second",
+  "icon": "golden_heart",
+  "rarity": "rare",
+  "function": {
+    "name": "regenerationRate",
+    "change": 1.5,
+    "operation": "add"
+  }
+}

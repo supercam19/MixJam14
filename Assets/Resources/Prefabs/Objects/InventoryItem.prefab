@@ -37,7 +37,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -154.5014, y: 0.3629}
+  m_AnchoredPosition: {x: -254.8, y: 0.3629}
   m_SizeDelta: {x: 23.6, y: 23.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2041263606543118628
@@ -96,7 +96,12 @@ MonoBehaviour:
     icon: 
     rarity: 
     stackable: 1
+    function:
+      name: 
+      change: 0
+      operation: 
     count: 0
+    inventoryItemCount: {fileID: 0}
 --- !u!1 &7978156726011522197
 GameObject:
   m_ObjectHideFlags: 0

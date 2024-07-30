@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class InventoryUIItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
     public static GameObject tooltip;
-    private const float SPACING = 62.2f;
+    public const float SPACING = 62.2f;
     [HideInInspector] public Item item;
 
     public void Setup(Item item, int inventoryPlace) {

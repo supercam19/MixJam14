@@ -9,7 +9,7 @@ public class BomberDrone : EnemyBehavior {
     public BomberDrone() {
         health = 25;
         maxHealth = 25;
-        speed = 10;
+        speed = 8;
         damage = 65;
         canFly = false;
         ranged = false;
@@ -27,7 +27,7 @@ public class BomberDrone : EnemyBehavior {
     protected override void Update() {
         if (lockPosition != Vector3.zero) transform.position = lockPosition;
         base.Update();
-        animator.SetBool("moving", agent.isStopped);
+        animator.SetBool("moving", agent.velocity != Vector3.zero);
     }
 
     protected override void Attack() {
@@ -55,7 +55,7 @@ public class BomberDrone : EnemyBehavior {
 
     private void BlowUp() {
         Instantiate(explosionPrefab, transform.position, Quaternion.identity).GetComponent<AOEBehavior>()
-            .SpawnAOE(transform.position, damage, 1.5f, 0.5f, isFriendly);
+            .SpawnAOE(transform.position, damage, 2, 0.5f, isFriendly);
         base.Die();
     }
 }

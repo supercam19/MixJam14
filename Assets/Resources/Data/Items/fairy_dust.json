@@ -1,0 +1,11 @@
+﻿{
+  "name": "Fairy Dust",
+  "description": "Gain a +5% chance to instantly kill an enemy",
+  "icon": "fairy_dust",
+  "rarity": "legendary",
+  "function": {
+    "name": "wontInstantKillChance",
+    "change": 0.95,
+    "operation": "multiply"
+  }
+}

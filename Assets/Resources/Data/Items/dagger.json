@@ -1,11 +1,11 @@
 ﻿{
   "name": "Black Dagger",
-  "description": "The first hit to an enemy deals 100% more damage.",
+  "description": "The first hit to an enemy deals 40% more damage.",
   "icon": "dagger",
   "rarity": "rare",
   "function": {
     "name": "firstHitMultiplier",
-    "change": 2,
+    "change": 1.4,
     "operation": "multiply"
   }
 }

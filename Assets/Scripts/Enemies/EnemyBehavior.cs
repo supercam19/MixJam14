@@ -92,7 +92,7 @@ public class EnemyBehavior : MonoBehaviour {
             else if (playerDistance > followRange) {
                 followingPlayer = false;
             }
-            else if (playerDistance < attackRange && CanAttack()) {
+            else if (playerDistance < attackRange + 0.2f && CanAttack()) {
                 InitiateAttack();
                 lastAttackTime = Time.time;
             }
@@ -149,11 +149,18 @@ public class EnemyBehavior : MonoBehaviour {
 
     public virtual void TakeDamage(float damage) {
         if (Time.time < invincibilityTime) return;
+        if (Random.value > stats.wontInstantKillChance) {
+            damage = health;
+            AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/fairy_dust_use"), transform.position, SoundManager.sfxVolume * SoundManager.masterVolume);
+        }
+        else {
+            SoundManager.Play(gameObject, hitSounds, pitchVariance: 0.1f);
+        }
         if (!hasBeenHit) {
             damage *= stats.firstHitMultiplier;
             hasBeenHit = true;
         }
-        SoundManager.Play(gameObject, hitSounds, pitchVariance: 0.1f);
+        
         health -= damage;
         if (health <= 0) {
             Die();

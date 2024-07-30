@@ -52,8 +52,14 @@ public class PlayerStats : MonoBehaviour {
     public float cloaked { get => _cloaked; set => _cloaked = value; }
     [SerializeField] private float _sprintDamageReduction = 1;
     public float sprintDamageReduction { get => _sprintDamageReduction; set => _sprintDamageReduction = value; }
-    [SerializeField] private float _regenerationRate = 0.5f;
+    [SerializeField] private float _regenerationRate = 1f;
     public float regenerationRate { get => _regenerationRate; set => _regenerationRate = value; }
+    [SerializeField] private float _wontInstantKillChance = 1;
+    public float wontInstantKillChance {get => _wontInstantKillChance; set => _wontInstantKillChance = value;}
+    [SerializeField] private float _cheatDeaths = 0;
+    public float cheatDeaths {get => _cheatDeaths; set => _cheatDeaths = value;}
+    [SerializeField] private float _wontDodgeChance = 1;
+    public float wontDodgeChance {get => _wontDodgeChance; set => _wontDodgeChance = value;}
 
 
 
@@ -82,7 +88,10 @@ public class PlayerStats : MonoBehaviour {
         bonusGoldPerKill = 0;
         cloaked = 0;
         sprintDamageReduction = 1;
-        regenerationRate = 0.5f;
+        regenerationRate = 1f;
+        wontInstantKillChance = 1;
+        cheatDeaths = 0;
+        wontDodgeChance = 1;
     }
 
 }

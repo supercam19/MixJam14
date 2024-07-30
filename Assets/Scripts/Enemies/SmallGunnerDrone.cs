@@ -16,7 +16,7 @@ public class SmallGunnerDrone : EnemyBehavior {
         attackCooldown = 0.2f;
         burstShots = 3;
         burstCooldown = 1.4f;
-        sightRange = 15;
+        sightRange = 10;
         followRange = 25;
         selfPreservation = 0.1f;
     }
@@ -28,7 +28,7 @@ public class SmallGunnerDrone : EnemyBehavior {
 
     protected override void Attack() {
         ProjectileBehavior pb = Instantiate(bulletPrefab, transform.position, Quaternion.identity).GetComponent<ProjectileBehavior>();
-        pb.Fire((player.transform.position - transform.position).normalized);
+        pb.Fire(player.transform.position - transform.position);
         pb.damageMultiplier = damage;
         SoundManager.Play(gameObject, shootSounds);
     }

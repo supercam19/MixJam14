@@ -1,0 +1,11 @@
+﻿{
+  "name": "Blue Orb",
+  "description": "+4% chance to completely block an attack",
+  "icon": "blue_orb",
+  "rarity": "rare",
+  "function": {
+    "name": "wontDodgeChance",
+    "change": 0.96,
+    "operation": "multiply"
+  }
+}

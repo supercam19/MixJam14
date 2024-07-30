@@ -34,12 +34,13 @@ public class ChallengeChest : InteractableObject {
         foreach (Vector3 pos in unavailableSpawns) {
             enemies.Add(Instantiate(Resources.Load<GameObject>("Prefabs/Enemies/" + enemyTable.GetRandomEnemyWeighed()), pos,
                 Quaternion.identity));
-            enemies.Last().GetComponent<EnemyBehavior>().SpawnInvinvibility(2);
+            enemies.Last().GetComponent<EnemyBehavior>().SpawnInvinvibility(1.25f);
         }
 
         sr.sprite = Resources.LoadAll<Sprite>("Textures/textures")[10];
         GetComponent<BoxCollider2D>().enabled = false;
         opened = true;
+        SoundManager.Play(gameObject, "phoenix_feather_use");
     }
     
     public override void DrawTip() {

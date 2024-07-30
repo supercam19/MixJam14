@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour {
     
     public static int killsThisFloor = 0;
     public static int killsRequired;
+
+    private string[] songs = { "music_1", "music_2" };
     
 
     void Start() {
@@ -37,6 +39,7 @@ public class GameManager : MonoBehaviour {
         ItemRoller.Initialize();
         InteractableTip.Initialize();
         player.transform.position = new Vector3(generator.randomSpawnPoint.x, generator.randomSpawnPoint.y, 0);
+        PlayMusic();
     }
 
     void Update() {
@@ -49,6 +52,11 @@ public class GameManager : MonoBehaviour {
         paused = !paused;
         Time.timeScale = paused ? 0 : 1;
         pauseMenu.SetActive(paused);
+    }
+
+    private void PlayMusic() {
+        float length = SoundManager.Play(player, songs, isMusic: true);
+        Invoke("PlayMusic", length + 2);
     }
 
     public void EndGame() {
@@ -80,6 +88,7 @@ public class GameManager : MonoBehaviour {
         hudFloor.text = "Floor " + level;
         generator.Generate();
         killsRequired = activeEnemies.Count;
+        killsThisFloor = 0;
         player.transform.position = new Vector3(generator.randomSpawnPoint.x, generator.randomSpawnPoint.y, 0);
     }
 
@@ -93,7 +102,7 @@ public class GameManager : MonoBehaviour {
             Destroy(uiInventory.GetChild(i).gameObject);
         }
         player.GetComponent<Inventory>().items.Clear();
-        SetFloor(0);
+        SetFloor(1);
         Time.timeScale = 1;
         paused = false;
         GameObject.Find("GameOver").SetActive(false);

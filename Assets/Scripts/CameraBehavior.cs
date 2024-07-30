@@ -16,10 +16,10 @@ public class CameraBehavior : MonoBehaviour {
 
     void Update() {
         transform.position = new Vector3(player.position.x, player.position.y, transform.position.z);
-        if (cam.orthographicSize >= 1.0f && cam.orthographicSize <= 10.0f)
-            cam.orthographicSize += Input.mouseScrollDelta.y * zoomSensitivity;
-        // For overscrolling (also will throw error when too low)
-        cam.orthographicSize = Mathf.Min(10.0f, cam.orthographicSize);
-        cam.orthographicSize = Mathf.Max(1.0f, cam.orthographicSize);
+        // if (cam.orthographicSize >= 1.0f && cam.orthographicSize <= 10.0f)
+        //     cam.orthographicSize += Input.mouseScrollDelta.y * zoomSensitivity;
+        // // For overscrolling (also will throw error when too low)
+        // cam.orthographicSize = Mathf.Min(10.0f, cam.orthographicSize);
+        // cam.orthographicSize = Mathf.Max(1.0f, cam.orthographicSize);
     }
 }

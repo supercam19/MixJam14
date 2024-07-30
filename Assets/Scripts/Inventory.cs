@@ -33,6 +33,35 @@ public class Inventory : MonoBehaviour {
             DoAction(item);
         }
     }
+    
+    [ContextMenu("RollChallenge")]
+    public void RollChallenge() {
+        AddItem(ItemRoller.RollItem(2));
+    }
+
+    public void RemoveItem(string name, int count) {
+        int index = -1;
+        for (int i = 0; i < items.Count; i++) {
+            if (items[i].name.Equals(name)) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index > -1) {
+            if (items[index].count > count) {
+                items[index].SetCount(items[index].count - count);
+            }
+            else {
+                items.Remove(items[index]);
+                for (int i = index; i < inventoryUI.transform.childCount; i++) {
+                    inventoryUI.transform.GetChild(i).transform.position = (Vector2)inventoryUI.transform.GetChild(i).transform.position - new Vector2(InventoryUIItem.SPACING, 0);
+                }
+                Debug.Log("Index of item: " + index);
+                Destroy(inventoryUI.transform.GetChild(index).gameObject);
+            }
+        }
+    }
 
     private void DoAction(Item item) {
         if (item.function == null) {

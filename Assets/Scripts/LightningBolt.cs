@@ -23,6 +23,8 @@ public class LightningBolt : MonoBehaviour {
                 hit.GetComponent<EnemyBehavior>().TakeDamage(stats.damage * damageMultiplier);
             }
         }
+
+        AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/lightning_strike"), transform.position, SoundManager.sfxVolume * SoundManager.masterVolume);
     }
 
     void Update() {
